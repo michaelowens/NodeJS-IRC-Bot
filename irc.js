@@ -27,8 +27,8 @@ Server.prototype.initialize = function( config ) {
 	this.username = config.username || 'MikeBot';
 	this.realname = config.realname || 'Powered by MikeBot';
 	this.mainchannel = config.channel || null;
-	this.channels = [];
 	this.command = config.command || '.';
+	this.channels = [];
 	this.hooks = [];
 	this.triggers = [];
 	
@@ -37,7 +37,7 @@ Server.prototype.initialize = function( config ) {
 	this.encoding = "utf8";
 	this.timeout = 60*60*1000;
 	
-	this.debug = false;
+	this.debug = config.debug || false;
 	
 	/*
 	 * Boot Plugins

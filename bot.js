@@ -19,6 +19,7 @@ var config = {
 	realname:	'Powered by Michael Owens',
 	channel:	'#nodejs',
 	command:	'.',
+	debug:		false,
 	
 	plugins:	[ 'reload', 'gezien', 'textfilter' ]
 };
