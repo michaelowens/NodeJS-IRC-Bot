@@ -4,10 +4,12 @@ This is a plugin-based IRC Bot written in NodeJS by Michael Owens (http://www.mi
 
 Prerequisites
 =============
-NodeJS (tested under v0.2.6)
+* NodeJS (tested under v0.2.6)
 
 How to run
 ==========
 Modify your configuration in bot.js and run the following command:
 
     node bot.js
+
+The bot will now attempt to connect. Turn on debugging to see the incoming/outgoing packets.
