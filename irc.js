@@ -31,6 +31,7 @@ Server.prototype.initialize = function( config ) {
 	this.channels = [];
 	this.hooks = [];
 	this.triggers = [];
+	this.replies = [];
 	
 	this.connection = null;
 	this.buffer = "";
@@ -162,21 +163,9 @@ Server.prototype.onMessage = function( msg ) {
 		case 'NICK':
 			this.emit( 'nick', msg );
 			break;
-			
-		case '376': // MODES / MOTD KLAAR
-			if( this.mainchannel != null ) {
-				
-				var chan = new Channel( this, this.mainchannel, true );
-				chan.join( );
-				
-				this.channels[ chan.room ] = chan;
-				
-				chan.send( 'Hey, did you miss me? ;-)' );
-				
-			}
-			break;
 	}
 	
+	this.emit( msg.command, msg );
 	this.emit( 'data', msg );
     
 };
@@ -207,8 +196,8 @@ Server.prototype.parse = function( text ) {
 	
 	for ( var i = 0, j = tmp.length; i < j; i++ ) {
 		
-		if ( i == 0 && tmp[ i ].indexOf(":") == 0 )
-			prefix = tmp[0].substr(1);
+		if ( i == 0 && tmp[ i ].indexOf( ":" ) == 0 )
+			prefix = tmp[ 0 ].substr( 1 );
 		
 		else if ( tmp[ i ] == "" )
 			continue;
@@ -216,11 +205,11 @@ Server.prototype.parse = function( text ) {
 		else if ( !command && tmp[ i ].indexOf(":") != 0 )
 			command = tmp[ i ].toUpperCase();
 		
-		else if ( tmp[ i ].indexOf(":") == 0 ) {
+		else if ( tmp[ i ].indexOf( ":" ) == 0 ) {
 		
 			tmp[ i ] = tmp[ i ].substr(1);
 			tmp.splice( 0, i );
-			arguments.push( tmp.join(" ") );
+			arguments.push( tmp.join( " " ) );
 			lastarg = arguments.length - 1;
 			break;
 		
@@ -314,6 +303,16 @@ Server.prototype.loadPlugin = function( name ) {
 			
 		}
 		
+		if( typeof this.replies[ name ] != 'undefined' ) {
+			
+			for( var reply in this.replies[ name ] ) {
+				
+				this.removeListener( this.replies[ name ][ reply ].event, this.replies[ name ][ reply ].callback );
+				
+			}
+			
+		}
+		
 		for( var trig in this.triggers ) {
 			
 			if( this.triggers[ trig ].plugin == name ) {
@@ -363,5 +362,24 @@ Server.prototype.addTrigger = function( plugin, trigger, callback ) {
 		this.triggers[ trigger ] = { plugin: plugin.name, callback: callback };
 		
 	}
+	
+};
+
+Server.prototype.onReply = function( plugin, ev, f ) {
+		
+	if( typeof this.replies[ plugin ] == 'undefined' ) this.replies[ plugin ] = [];
+	
+	var callback = ( function( ) {
+		
+		return function( ) {
+			f.apply( that, arguments )
+		};
+		
+	} )();
+	
+	this.replies[ plugin ].push( { event: ev, callback: callback } );
+	
+	var that = this.plugins[ plugin ];
+	return this.on( ev, callback );
 	
 };

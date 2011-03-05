@@ -21,7 +21,7 @@ var config = {
 	command:	'.',
 	debug:		false,
 	
-	plugins:	[ 'reload', 'gezien', 'textfilter' ]
+	plugins:	[ 'global', 'reload', 'gezien', 'textfilter' ]
 };
 
 /**
