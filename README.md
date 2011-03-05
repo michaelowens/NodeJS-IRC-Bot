@@ -1,6 +1,6 @@
 NodeJS IRC Bot
 ==============
-This is a plugin-based IRC Bot written in NodeJS by Michael Owens (http://www.michaelowens.nl).
+This is a plugin-based IRC Bot written in NodeJS by [Michael Owens](http://www.michaelowens.nl).
 
 Prerequisites
 =============
