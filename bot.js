@@ -12,7 +12,7 @@ var sys = require( 'sys' ),
  * Config
  */
 var config = {
-	host:		'127.0.0.1',
+	host:		'irc.freenode.com',
 	port:		6667,
 	nick:		'NodeBot',
 	username:	'NodeBot',
