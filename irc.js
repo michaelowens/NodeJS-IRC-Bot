@@ -286,7 +286,7 @@ Server.prototype.addPluginListener = function( plugin, ev, f ) {
 	
 };
 
-Server.prototype.removePlugin = function( name ) {
+Server.prototype.unloadPlugin = function( name ) {
 
 	if( typeof this.plugins[ name ] != 'undefined' ) {
 		
@@ -329,43 +329,8 @@ Server.prototype.removePlugin = function( name ) {
 
 
 Server.prototype.loadPlugin = function( name ) {
-	
-	// If reloading, remove prior instance
-	if( typeof this.plugins[ name ] != 'undefined' ) {
-		
-		delete this.plugins[ name ];
-		
-		if( typeof this.hooks[ name ] != 'undefined' ) {
-			
-			for( var hook in this.hooks[ name ] ) {
-				
-				this.removeListener( this.hooks[ name ][ hook ].event, this.hooks[ name ][ hook ].callback );
-				
-			}
-			
-		}
-		
-		if( typeof this.replies[ name ] != 'undefined' ) {
-			
-			for( var reply in this.replies[ name ] ) {
-				
-				this.removeListener( this.replies[ name ][ reply ].event, this.replies[ name ][ reply ].callback );
-				
-			}
-			
-		}
-		
-		for( var trig in this.triggers ) {
-			
-			if( this.triggers[ trig ].plugin == name ) {
-				
-				delete this.triggers[ trig ];
-				
-			}
-			
-		}
-		
-	}
+
+        this.unloadPlugin( name );
 	
 	var that = this;
 	fs.readFile( './plugins/' + name + '.js', 'utf8', function( err, data ) {

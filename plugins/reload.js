@@ -48,7 +48,7 @@ Plugin.prototype.unloadPlugin = function( msg ) {
 	
 	this.irc.channels[ c ].send( 'unloading plugin: ' + params[ 0 ] );
 	
-	this.irc.removePlugin( params[ 0 ] );
+	this.irc.unloadPlugin( params[ 0 ] );
 	
 	
 };
