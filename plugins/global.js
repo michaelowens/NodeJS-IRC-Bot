@@ -19,18 +19,18 @@ Plugin = exports.Plugin = function( irc ) {
 	// end of MOTD/MODES
 	var that = this;
 	this.irc.onReply( this.name, '376', function( msg ) {
-		
-		if( that.irc.mainchannel != null ) {
-			
-			var chan = new Channel( that.irc, that.irc.mainchannel, true );
-			chan.join( );
-			
-			that.irc.channels[ chan.room ] = chan;
-			
-			chan.send( 'Hey, did you miss me? ;-)' );
-			
-		}
-		
-	} );
-	
+
+			      for ( i = 0; i < that.irc.userchannels.length; i++ ) {
+
+				  var chan = new Channel( that.irc, that.irc.userchannels[i], true);
+				  chan.join();
+
+				  that.irc.channels[chan.room] = chan;
+
+				  chan.send( 'Hey, did you miss me? ;-)' );
+
+			      }			      
+
+			  } );
+
 };
