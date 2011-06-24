@@ -145,7 +145,17 @@ Server.prototype.onMessage = function( msg ) {
 				}
 				
 			}
-			this.emit( 'message', msg );
+
+	                if( msg.arguments[ 0 ] == this.nick ) {
+
+			    this.emit( 'private_message', msg );
+
+			} else {
+
+			    this.emit( 'message', msg );
+
+			}
+
 			break;
 			
 		case 'JOIN':
@@ -355,6 +365,7 @@ Server.prototype.loadPlugin = function( name ) {
 			if( typeof that.plugins[ name ].onPart == 'function' ) that.addPluginListener( name, 'part', that.plugins[ name ].onPart );
 			if( typeof that.plugins[ name ].onQuit == 'function' ) that.addPluginListener( name, 'quit', that.plugins[ name ].onQuit );
 			if( typeof that.plugins[ name ].onNick == 'function' ) that.addPluginListener( name, 'nick', that.plugins[ name ].onNick );
+		        if( typeof that.plugins[ name ].onPrivateMessage == 'function' ) that.addPluginListener( name, 'private_message', that.plugins[ name ].onPrivateMessage );
 			
 		}
 		
