@@ -270,7 +270,7 @@ Server.prototype.addListener = function( ev, f ) {
 	return this.connection.addListener( ev, ( function( ) {
 		
 		return function( ) {
-			f.apply( that, arguments )
+			f.apply( that, arguments );
 		};
 		
 	} )() );
@@ -284,7 +284,7 @@ Server.prototype.addPluginListener = function( plugin, ev, f ) {
 	var callback = ( function( ) {
 		
 		return function( ) {
-			f.apply( that, arguments )
+			f.apply( that, arguments );
 		};
 		
 	} )();
@@ -390,7 +390,7 @@ Server.prototype.onReply = function( plugin, ev, f ) {
 	var callback = ( function( ) {
 		
 		return function( ) {
-			f.apply( that, arguments )
+			f.apply( that, arguments );
 		};
 		
 	} )();
