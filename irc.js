@@ -26,8 +26,8 @@ Server.prototype.initialize = function( config ) {
 	this.nick = config.nick || 'MikeBot';
 	this.username = config.username || 'MikeBot';
 	this.realname = config.realname || 'Powered by MikeBot';
-	this.mainchannel = config.channel || null;
 	this.command = config.command || '.';
+        this.userchannels = config.channels || [];
 	this.channels = [];
 	this.hooks = [];
 	this.triggers = [];
@@ -145,7 +145,17 @@ Server.prototype.onMessage = function( msg ) {
 				}
 				
 			}
-			this.emit( 'message', msg );
+
+	                if( msg.arguments[ 0 ] == this.nick ) {
+
+			    this.emit( 'private_message', msg );
+
+			} else {
+
+			    this.emit( 'message', msg );
+
+			}
+
 			break;
 			
 		case 'JOIN':
@@ -260,7 +270,7 @@ Server.prototype.addListener = function( ev, f ) {
 	return this.connection.addListener( ev, ( function( ) {
 		
 		return function( ) {
-			f.apply( that, arguments )
+			f.apply( that, arguments );
 		};
 		
 	} )() );
@@ -274,7 +284,7 @@ Server.prototype.addPluginListener = function( plugin, ev, f ) {
 	var callback = ( function( ) {
 		
 		return function( ) {
-			f.apply( that, arguments )
+			f.apply( that, arguments );
 		};
 		
 	} )();
@@ -286,9 +296,8 @@ Server.prototype.addPluginListener = function( plugin, ev, f ) {
 	
 };
 
-Server.prototype.loadPlugin = function( name ) {
-	
-	// If reloading, remove prior instance
+Server.prototype.unloadPlugin = function( name ) {
+
 	if( typeof this.plugins[ name ] != 'undefined' ) {
 		
 		delete this.plugins[ name ];
@@ -324,6 +333,14 @@ Server.prototype.loadPlugin = function( name ) {
 		}
 		
 	}
+
+
+};
+
+
+Server.prototype.loadPlugin = function( name ) {
+
+        this.unloadPlugin( name );
 	
 	var that = this;
 	fs.readFile( './plugins/' + name + '.js', 'utf8', function( err, data ) {
@@ -348,6 +365,7 @@ Server.prototype.loadPlugin = function( name ) {
 			if( typeof that.plugins[ name ].onPart == 'function' ) that.addPluginListener( name, 'part', that.plugins[ name ].onPart );
 			if( typeof that.plugins[ name ].onQuit == 'function' ) that.addPluginListener( name, 'quit', that.plugins[ name ].onQuit );
 			if( typeof that.plugins[ name ].onNick == 'function' ) that.addPluginListener( name, 'nick', that.plugins[ name ].onNick );
+		        if( typeof that.plugins[ name ].onPrivateMessage == 'function' ) that.addPluginListener( name, 'private_message', that.plugins[ name ].onPrivateMessage );
 			
 		}
 		
@@ -372,7 +390,7 @@ Server.prototype.onReply = function( plugin, ev, f ) {
 	var callback = ( function( ) {
 		
 		return function( ) {
-			f.apply( that, arguments )
+			f.apply( that, arguments );
 		};
 		
 	} )();

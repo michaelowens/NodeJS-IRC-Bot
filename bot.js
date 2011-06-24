@@ -17,7 +17,7 @@ var config = {
 	nick:		'NodeBot',
 	username:	'NodeBot',
 	realname:	'Powered by Michael Owens',
-	channel:	'#nodejs',
+	channels:	['#nodejs'],
 	command:	'.',
 	debug:		false,
 	

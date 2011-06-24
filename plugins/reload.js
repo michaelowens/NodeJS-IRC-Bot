@@ -17,6 +17,7 @@ Plugin = exports.Plugin = function( irc ) {
 	this.irc = irc;
 	
 	this.irc.addTrigger( this, 'reload', this.trigGezien );
+        this.irc.addTrigger( this, 'unload', this.unloadPlugin );
 	
 };
 
@@ -32,6 +33,22 @@ Plugin.prototype.trigGezien = function( msg ) {
 	this.irc.channels[ c ].send( 'Reloading plugin: ' + params[ 0 ] );
 	
 	this.irc.loadPlugin( params[ 0 ] );
+	
+	
+};
+
+Plugin.prototype.unloadPlugin = function( msg ) {
+	
+	var c = msg.arguments[ 0 ], // channel
+		u = this.irc.user( msg.prefix ), // user
+		m = msg.arguments[ 1 ]; // message
+	
+	var params = m.split( ' ' );
+	params.shift();
+	
+	this.irc.channels[ c ].send( 'unloading plugin: ' + params[ 0 ] );
+	
+	this.irc.unloadPlugin( params[ 0 ] );
 	
 	
 };
