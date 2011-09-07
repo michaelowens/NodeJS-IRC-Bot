@@ -7,11 +7,12 @@
  */
 var sys = require( 'sys' );
 
-Channel = exports.Channel = function( irc, room, join ) {
+Channel = exports.Channel = function( irc, room, join, password ) {
 	
 	this.irc = irc;
 	this.room = room;
 	this.inRoom = false;
+	this.password = password;
 	
 	if( join ) this.join( );
 	
@@ -19,7 +20,7 @@ Channel = exports.Channel = function( irc, room, join ) {
 
 Channel.prototype.join = function( ) {
 	
-	this.irc.raw( 'JOIN', this.room );
+	this.irc.raw( 'JOIN', this.room, this.password );
 	this.inRoom = true;
 	
 };
